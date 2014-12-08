@@ -10,19 +10,19 @@ import java.util.ArrayList;
  */
 public class MergeSort {
 
-    protected static <T extends Comparable> void merge(T[] array, int p, int q, int r) {
+    protected static <T extends Comparable> void merge(T[] array, int begin, int mid, int end) {
         ArrayList<T> left = new ArrayList<T>();
-        for (int i = p; i <= q; i++) {
+        for (int i = begin; i <= mid; i++) {
             left.add(array[i]);
         }
         ArrayList<T> right = new ArrayList<T>();
-        for (int i = q + 1; i <= r; i++) {
+        for (int i = mid + 1; i <= end; i++) {
             right.add(array[i]);
         }
 
         int i = 0;
         int j = 0;
-        for (int k = p; k <= r; k++) {
+        for (int k = begin; k <= end; k++) {
             if (i < left.size() && j < right.size()) {
                 if (left.get(i).compareTo(right.get(j)) < 0) {
                     array[k] = left.get(i);
@@ -41,15 +41,15 @@ public class MergeSort {
         }
     }
 
-    public static <T extends Comparable> void sort(T[] array, int p, int r) {
+    public static <T extends Comparable> void sort(T[] array, int begin, int end) {
         if (array == null) {
             throw new IllegalArgumentException("array == null.");
         }
-        if (p < r) {
-            int q = (p + r) / 2;
-            sort(array, p, q);
-            sort(array, q + 1, r);
-            merge(array, p, q, r);
+        if (begin < end) {
+            int mid = (begin + end) / 2;
+            sort(array, begin, mid);
+            sort(array, mid + 1, end);
+            merge(array, begin, mid, end);
         }
     }
 }
