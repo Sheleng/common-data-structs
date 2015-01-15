@@ -15,40 +15,43 @@ public class HeapSort {
         throw new RuntimeException("HeapSort.class can't be instantiated.");
     }
 
-    private static <T extends Comparable> void maxHeapIfy(T[] array, int heapSize, int index) {
-        int left = index * 2 + 1;
-        int right = index * 2 + 2;
-        int largest = index;
+    private static <T extends Comparable> void swap(T[] array, int first, int second) {
+        T temp = array[first];
+        array[first] = array[second];
+        array[second] = temp;
+    }
 
-        if (left < heapSize && array[left].compareTo(array[index]) > 0) {
-            largest = left;
+    public static <T extends Comparable> void maxHeapFix(T[] array, int index, int heapSize) {
+        int largest = index;
+        int lChild = (index << 1) + 1;
+        int rChild = (index << 1) + 2;
+
+        if (lChild < heapSize && array[lChild].compareTo(array[largest]) > 0) {
+            largest = lChild;
         }
-        if (right < heapSize && array[right].compareTo(array[largest]) > 0) {
-            largest = right;
+        if (rChild < heapSize && array[rChild].compareTo(array[largest]) > 0) {
+            largest = rChild;
         }
-        if (largest != index) {
-            T temp = array[index];
-            array[index] = array[largest];
-            array[largest] = temp;
-            maxHeapIfy(array, heapSize, largest);
+        if (largest == index) {
+            return;
         }
+        swap(array, index, largest);
+        maxHeapFix(array, largest, heapSize);
     }
 
     private static <T extends Comparable> void buildMaxHeap(T[] array) {
         for (int i = (array.length - 1) / 2; i >= 0; i--) {
-            maxHeapIfy(array, array.length, i);
+            maxHeapFix(array, i, array.length);
         }
     }
 
     public static <T extends Comparable> void sort(T[] array) {
-        buildMaxHeap(array);
         int heapSize = array.length;
-        for (int i = array.length - 1; i >= 1; i--) {
-            T temp = array[0];
-            array[0] = array[i];
-            array[i] = temp;
-            heapSize = heapSize - 1;
-            maxHeapIfy(array, heapSize, 0);
+        buildMaxHeap(array);
+        for (int i = array.length - 1; i > 0; i--) {
+            swap(array, 0, i);
+            heapSize--;
+            maxHeapFix(array, 0, heapSize);
         }
     }
 }
